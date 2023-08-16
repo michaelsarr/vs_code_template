@@ -19,7 +19,7 @@
 typedef int32_t fint32_t;
 
 #define WIDTH 320
-#define HEIGHT 180 // 180 or 240
+#define HEIGHT 240 // 180 or 240
 
 static void vmode(uint16_t data)
 {
@@ -74,21 +74,35 @@ void main()
 {
 FILE * input;
 int8_t pixel;
+int loop;
+int cnt=0;
+char names[5][20]={"gilberti.bin","lucy2.bin","anita.bin","bosko.bin","lucy.bin"};
+int slides=5;
 #if (HEIGHT == 180)
    vmode(2);
 #else
-  //  vmode(1);
+   vmode(1);
 #endif
    // wait();
-    erase();
+   while (1)
+   {
+   // erase();
     RIA_ADDR0 = 0;
     RIA_STEP0 = 1;
-
-    input = fopen("image.bin","rb");
+    if(cnt == slides) 
+    cnt = 0;
+    input = fopen(names[cnt],"rb");
     while (!feof(input)) 
     {
      fread(&pixel,1,1,input);
+     //RIA_RW0 = 0b10010001;
      RIA_RW0 = pixel;
      }
- while(1){};
+     fclose(input);
+     for (loop=0;loop < 10000;loop++)
+     {}
+     cnt++;
+
+   }
+
 }
